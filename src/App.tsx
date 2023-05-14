@@ -1,24 +1,52 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import { InputForm } from './components/InputForm';
+
+type Todo = {
+  id: number;
+  title: string;
+  completed: boolean;
+  // memo: 'todo-memo',
+  // priority: 'high',
+};
 
 function App() {
+  const [todos, setTodos] = useState<Todo[]>([
+    {
+      id: 1, // ユニークなID
+      title: '猫にご飯をあげる',
+      completed: true,
+    },
+    {
+      id: 2, // ユニークなID
+      title: '宿題をやる',
+      completed: false,
+    },
+  ]);
+
+  const addTodo = (title: string) => {
+    setTodos([
+      ...todos,
+      {
+        id: todos.length + 1,
+        title,
+        completed: false,
+      },
+    ]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <InputForm addTodo={addTodo} />
+      <div>
+        {todos.map((todo) => (
+          <div key={todo.id}>
+            <input type='checkbox' checked={todo.completed} />
+            <span>{todo.title}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
